@@ -1,0 +1,61 @@
+# .gitignore para LinkSales_New (Raiz)
+
+# === Dependências (Aplica-se ao back e front) ===
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+pnpm-debug.log
+
+# === Variáveis de Ambiente (CRÍTICO - Segurança) ===
+# Ignora .env em qualquer pasta
+.env
+.env.*
+!.env.example  # (Opcional: permite commitar um exemplo sem senhas)
+
+# === Logs e Databases Locais ===
+logs
+*.log
+*.pid
+*.seed
+*.pid.lock
+*.sqlite
+*.db
+
+# === Sistema Operacional ===
+.DS_Store
+Thumbs.db
+ehthumbs.db
+[Dd]esktop.ini
+
+# === Build / Output ===
+dist/
+build/
+coverage/
+tmp/
+temp/
+
+# === VSCode / IDE ===
+.vscode/
+.idea/
+*.swp
+*.swo
+.history
+
+# === Backend Específico ===
+# Se você gerar uploads ou arquivos estáticos no back
+backend/uploads/
+
+# === Frontend Específico (Expo / React Native) ===
+.expo/
+.expo-shared/
+web-build/
+.metro-health-check*
+
+# Pastas nativas (Se você usa Expo Managed Workflow, é bom ignorar. 
+# Se fizer prebuild, talvez precise remover estas linhas no futuro)
+android/
+ios/
+
+# === TypeScript ===
+*.tsbuildinfo

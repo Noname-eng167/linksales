@@ -1,0 +1,36 @@
+# Learn more https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
+
+# -----------------
+# 1. Dependências
+# -----------------
+node_modules/
+/dist
+/build
+
+# -----------------
+# 2. Arquivos de Debug/Lock
+# -----------------
+# Arquivos de log/debug
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+*.log
+
+# -----------------
+# 3. Arquivos de Ambiente Local (CRÍTICO)
+# -----------------
+.env
+.env.*
+.env*.local 
+.env.development
+.env.production
+
+# -----------------
+# 4. Arquivos do OS e TypeScript
+# -----------------
+# macOS
+.DS_Store
+*.pem
+
+# typescript
+*.tsbuildinfo
