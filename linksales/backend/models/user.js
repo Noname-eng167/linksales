@@ -44,7 +44,7 @@ const User = sequelize.define('Usuario', {
   tableName: 'Usuario',
   timestamps: true, // Habilita rastreamento de tempo (createdAt/updatedAt)
   createdAt: 'data_cadastro', // Mapeia createdAt
-  updatedAt: 'ultima_atualizacao', // Adiciona campo de atualização
+  updatedAt: false, // Adiciona campo de atualização
   underscored: true, // Usa snake_case para os nomes dos campos
 
   hooks: {
