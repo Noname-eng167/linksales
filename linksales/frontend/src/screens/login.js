@@ -5,13 +5,11 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
-  Image,
   KeyboardAvoidingView,
   Platform,
   Alert,
 } from 'react-native';
 
-// Importações para UI segura e Ícones
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import { Ionicons } from '@expo/vector-icons';
@@ -22,10 +20,7 @@ import API from '../services/api.js';
 export default function Login({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  
-  // Estado para controlar a visibilidade da senha
   const [hidePassword, setHidePassword] = useState(true);
-  
   const [loading, setLoading] = useState(false);
 
   const handleLogin = async () => {
@@ -46,7 +41,6 @@ export default function Login({ navigation }) {
       await AsyncStorage.setItem('@linksales_token', token);
       await AsyncStorage.setItem('@linksales_user_id', String(user.id));
 
-      // Alert.alert('Sucesso', 'Login realizado!'); // Opcional
       navigation.replace('MainTabs');
 
     } catch (error) {
@@ -65,7 +59,6 @@ export default function Login({ navigation }) {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
-      {/* Garante que a barra de status fique com ícones escuros */}
       <StatusBar style="dark" />
       
       <KeyboardAvoidingView
@@ -73,15 +66,13 @@ export default function Login({ navigation }) {
         style={styles.container}
       >
         <View style={styles.contentContainer}>
-          <Image
-            source={require('../assets/logo4.png')}
-            style={styles.logo}
-            resizeMode="contain"
-          />
           
-          <Text style={styles.title}>Bem-vindo de volta!</Text>
+          {/* Logo em Texto */}
+          <Text style={styles.logoText}>Link Sales</Text>
           
-          {/* Input de Email */}
+          {/* Título */}
+          <Text style={styles.title}>Acesse sua conta</Text>
+          
           <View style={styles.inputContainer}>
             <TextInput
               style={styles.input}
@@ -95,12 +86,11 @@ export default function Login({ navigation }) {
             />
           </View>
           
-          {/* Input de Senha com Ícone */}
           <View style={styles.inputContainer}>
             <TextInput
-              style={[styles.input, { flex: 1 }]} // flex: 1 para ocupar o espaço sobrando
+              style={[styles.input, { flex: 1 }]}
               placeholder="Senha"
-              secureTextEntry={hidePassword} // Usa o estado
+              secureTextEntry={hidePassword}
               value={password}
               onChangeText={setPassword}
               placeholderTextColor="#1B71BD"
@@ -131,7 +121,7 @@ export default function Login({ navigation }) {
             <Text style={styles.forgotPassword}>Esqueceu a senha?</Text>
           </TouchableOpacity>
           
-          <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+          <TouchableOpacity onPress={() => navigation.navigate('UserTypeScreen')}>
             <Text style={styles.registerText}>
               Não tem conta? <Text style={styles.registerLink}>Cadastre-se</Text>
             </Text>
@@ -150,24 +140,25 @@ const styles = StyleSheet.create({
   contentContainer: {
     flex: 1,
     paddingHorizontal: 25,
-    justifyContent: 'center',
+    justifyContent: 'center', // Mantém todo o conteúdo centralizado verticalmente na tela
   },
-  logo: {
-    width: 180,
-    height: 80,
-    alignSelf: 'center',
-    marginBottom: 40,
+  logoText: {
+    fontSize: 40,
+    fontWeight: 'bold',
+    color: '#1B71BD',
+    alignSelf: 'center', // Centraliza horizontalmente
+    marginBottom: 40, // AUMENTADO: De 10 para 40, para afastar e subir a logo em relação ao título
+    letterSpacing: -1,
   },
   title: {
-    fontSize: 28,
-    fontWeight: '700',
-    color: '#1B71BD',
-    marginBottom: 30,
+    fontSize: 24,
+    fontWeight: '600',
+    color: '#333',
+    marginBottom: 30, // AJUSTADO: De 40 para 30, para equilibrar o espaço com os inputs
     textAlign: 'center',
   },
-  // Estilo novo para o container do input (com a borda)
   inputContainer: {
-    flexDirection: 'row', // Coloca input e icone lado a lado
+    flexDirection: 'row',
     alignItems: 'center',
     height: 50,
     borderColor: '#1B71BD',
@@ -181,7 +172,7 @@ const styles = StyleSheet.create({
     height: '100%',
     fontSize: 16,
     color: '#1B71BD',
-    width: '100%', // Ocupa tudo se não tiver ícone
+    width: '100%',
   },
   iconButton: {
     padding: 5,

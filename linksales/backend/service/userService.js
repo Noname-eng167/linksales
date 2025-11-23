@@ -18,15 +18,35 @@ export class UserNotFoundError extends Error {
 class UserService {
     
     async login(email, password) {
-        // 1. Encontra o usuário pelo e-mail
-        const user = await UserModel.findOne({ where: { email } });
+        // 1. Busca o usuário
+        const user = await UserModel.findOne({ 
+            where: { email },
+            // Garante que estamos trazendo a senha do banco
+            attributes: ['id_usuario', 'email', 'senha', 'tipo_conta', 'id_comerciante', 'id_cliente']
+        });
 
         if (!user) {
+            console.log("❌ Login falhou: Usuário não encontrado no banco.");
             throw new Error('Credenciais inválidas.');
         }
 
+        // 🔍 DEBUG: Vamos ver o que tem no banco e o que chegou
+        console.log("====================================");
+        console.log("🔍 DEBUG LOGIN:");
+        console.log("📧 Email:", email);
+        console.log("🔑 Senha Digitada:", password);
+        console.log("🔒 Senha no Banco (Hash):", user.senha);
+        
+        // Verifica se a senha no banco é um hash do bcrypt (começa com $2b$)
+        const isHash = user.senha && user.senha.startsWith('$2b$');
+        console.log("A senha do banco é um hash válido?", isHash ? "SIM" : "NÃO (Isso é um problema!)");
+
         // 2. Verifica a senha
+        // Se a senha no banco NÃO for hash (for texto puro), o compare vai dar erro ou false
         const isPasswordValid = await user.checkPassword(password); 
+        
+        console.log("✅ Resultado da Comparação:", isPasswordValid);
+        console.log("====================================");
         
         if (!isPasswordValid) {
             throw new Error('Credenciais inválidas.');
@@ -36,22 +56,24 @@ class UserService {
     }
 
     async createUser(userData) {
-        // Inicia a transação 
         const transaction = await sequelize.transaction();
-        
         try {
-            const { email, senha, tipo_conta, telefone, cpf, nome, nome_comerciante, nascimento, ...rest } = userData;
+            const { email, senha, tipo_conta, telefone, cpf, nome, nome_comerciante, nascimento } = userData;
+
+            // Validações básicas antes de tentar criar
+            if (!email || !senha || !cpf) {
+                throw new Error('Dados obrigatórios faltando (Email, Senha ou CPF).');
+            }
 
             let id_comerciante = null;
             let id_cliente = null;
 
-            // Lógica para Comerciante
             if (tipo_conta === 'comerciante') {
-                // Verifica CNPJ
-                const existingComerciante = await ComercianteModel.findOne({ where: { cpnj: cpf } });
+                // Verifica Duplicidade
+                const existingComerciante = await ComercianteModel.findOne({ where: { cpnj: cpf }, transaction });
                 if (existingComerciante) throw new Error('CNPJ já cadastrado.');
 
-                // Cria na tabela Comerciante
+                // Cria Comerciante
                 const novoComerciante = await ComercianteModel.create({
                     nome_loja: nome_comerciante || nome, 
                     cpnj: cpf, 
@@ -61,32 +83,33 @@ class UserService {
                 id_comerciante = novoComerciante.id_comerciante;
 
             } else {
-                // Lógica para Cliente
-                // Verifica CPF
-                const existingCliente = await ClienteModel.findOne({ where: { cpf: cpf } });
+                // Verifica Duplicidade
+                const existingCliente = await ClienteModel.findOne({ where: { cpf: cpf }, transaction });
                 if (existingCliente) throw new Error('CPF já cadastrado.');
 
-                // Cria na tabela Cliente
+                // Cria Cliente
                 const novoCliente = await ClienteModel.create({
                     nome: nome,
                     cpf: cpf, 
                     nascimento: nascimento, 
+                    telefone: telefone // Adicionando telefone ao cliente também
                 }, { transaction });
                 
                 id_cliente = novoCliente.id_cliente;
             }
 
-            // Verifica Email no Usuário
-            const existingUser = await UserModel.findOne({ where: { email } });
+            // Verifica Duplicidade de Email
+            const existingUser = await UserModel.findOne({ where: { email }, transaction });
             if (existingUser) throw new Error('Email já cadastrado.');
 
-            // Cria o Login vinculado
+            // Cria Usuário
+            // IMPORTANTE: Passamos explicitamente null se o ID não existir
             const novoUsuario = await UserModel.create({
-                email,
-                senha, 
-                tipo_conta,
-                id_comerciante, 
-                id_cliente
+                email: email,
+                senha: senha, 
+                tipo_conta: tipo_conta,
+                id_comerciante: id_comerciante, 
+                id_cliente: id_cliente
             }, { transaction });
 
             await transaction.commit();
@@ -97,9 +120,8 @@ class UserService {
             };
 
         } catch (error) {
-            // Desfaz tudo se der erro
             await transaction.rollback();
-            console.error('Falha na transação de cadastro:', error);
+            console.error('Falha detalhada na criação:', error);
             throw error;
         }
     }

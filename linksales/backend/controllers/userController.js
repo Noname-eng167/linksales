@@ -9,10 +9,10 @@ class UserController {
     // Rota: POST /login (NÃO protegida)
     async login(req, res) {
         try {
-            const { email, senha } = req.body;
+            const { email, password } = req.body;
 
             // 1. Autentica no Service
-            const user = await UserService.login(email, senha);
+            const user = await UserService.login(email, password);
 
             // 2. Gera o Token JWT
             const token = jwt.sign(

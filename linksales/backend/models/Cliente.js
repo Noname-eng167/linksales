@@ -19,6 +19,10 @@ const Cliente = sequelize.define('Cliente', {
     unique: true,
     // Opcional: Adicionar validação de regex do CPF aqui se quiser reforçar
   },
+  telefone: {
+    type: DataTypes.STRING(20),
+    allowNull: true
+  },
   nascimento: {
     type: DataTypes.DATEONLY, // Usa apenas a data (sem hora)
     allowNull: true
