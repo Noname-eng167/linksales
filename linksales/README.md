@@ -1,88 +1,124 @@
 # 🛍️ LinkSales  
 ## _Mais que vendas — uma conexão entre cliente e comerciante._
 
-[![Build Status](https://github.com/Noname-eng167/LinkSales---Ecoomerce/actions/workflows/main.yml/badge.svg)](https://github.com/Noname-eng167/LinkSales---Ecoomerce/actions)
-
-
----
-### 📖 Descrição do Projeto
-O **LinkSales** é um aplicativo de **e-commerce com integração de rede social**, projetado para fortalecer a comunicação entre **clientes e comerciantes locais**.  
-Diferente das plataformas tradicionais, o LinkSales prioriza o **atendimento humanizado** e a **transparência na comunicação**, proporcionando uma experiência mais próxima, segura e intuitiva.
+[![Build Status](https://github.com/Noname-eng167/LinkSales---Ecoomerce/actions/workflows/main.yml/badge.svg)](https://github.com/Noname-eng167/linksales/edit/main/linksales)
 
 ---
 
-### 🎯 Objetivo
-Promover um ambiente digital que facilite:
-- O **atendimento direto** entre clientes e comerciantes;
-- A **divulgação personalizada** de produtos e serviços;
-- O **aumento da confiança** nas compras online locais;
-- A **redução de fraudes** e mal-entendidos durante negociações.
+## 📖 Descrição do Projeto
+O **LinkSales** é um aplicativo de **e-commerce integrado a funcionalidades de rede social**, desenvolvido com foco em resolver uma das maiores limitações das plataformas atuais:  
+👉 **a dificuldade de comunicação clara e direta entre clientes e comerciantes.**
+
+Enquanto muitos aplicativos se concentram apenas em vender, o LinkSales prioriza o **atendimento humanizado**, a **transparência** e uma experiência mais próxima e confiável.  
+O objetivo é criar um ambiente onde o usuário possa tirar dúvidas com facilidade, validar informações e se sentir seguro ao comprar.
 
 ---
 
-### 👥 Público-Alvo
-Nosso público compreende pessoas de **16 a 90 anos**, com diferentes níveis de familiaridade com tecnologia.  
-O design simples e intuitivo visa garantir que **adolescentes, adultos e idosos** consigam utilizar o aplicativo com facilidade, mantendo a comunicação clara e acessível.
+## ⚠️ Problemática
+Apesar da popularidade dos e-commerces, muitos consumidores ainda enfrentam **insegurança e frustração** devido à comunicação limitada com vendedores.  
+Essa falta de interação direta torna o processo de compra menos transparente, gera dúvidas não respondidas e pode levar o cliente a desistir da compra.
+
+Idosos, iniciantes em tecnologia e jovens que dependam de responsáveis são ainda mais afetados quando encontram interfaces pouco intuitivas ou canais de atendimento confusos.
+
+Diante desse cenário, o **LinkSales** surge como uma solução que coloca a comunicação no centro da experiência, aproximando cliente e comerciante e tornando todo o processo:
+
+✔ mais seguro  
+✔ mais humano  
+✔ mais simples  
+✔ mais confiável  
 
 ---
 
-### 💡 Motivação
-A ideia surgiu ao observar a **falta de comunicação direta** entre cliente e vendedor em diversos aplicativos de e-commerce.  
-Acreditamos que uma base sólida de **atendimento ao cliente** é o diferencial que garante **satisfação, confiança e fidelização**.
+## 🎯 Objetivo
+Criar um ambiente digital que facilite:
+
+- A **conversa direta** entre cliente e comerciante;  
+- A **validação transparente** de produtos e serviços;  
+- O **aumento da confiança** nas compras online;  
+- A **redução de fraudes e mal-entendidos**;  
+- A experiência de compra mais fácil e acessível para todos os perfis de usuários.
 
 ---
 
-### ⚙️ Funcionalidades Principais
-- Cadastro de **usuários** (clientes e comerciantes);  
-- Criação e exibição de **postagens com produtos**;  
-- **Chat humanizado** entre cliente e comerciante;  
-- **Feed dinâmico** com publicações recentes;  
-- Sistema de **carrinho** e **seguimento de comerciantes**;  
-- Interface fluida e responsiva.
+## 👥 Público-Alvo
+O LinkSales é destinado a pessoas de **16 a 90 anos**, incluindo:
+
+- Jovens buscando praticidade,  
+- Adultos habituados ao e-commerce,  
+- Idosos com pouca experiência tecnológica.
+
+A interface simples e intuitiva foi projetada para que qualquer pessoa consiga navegar e interagir com facilidade.
 
 ---
 
-### 🧩 Tecnologias Utilizadas
+## 💡 Motivação
+A motivação surgiu ao observar uma carência real:  
+📌 **A comunicação deficiente entre vendedor e cliente em muitos apps de e-commerce.**
+
+Plataformas que não priorizam o atendimento acabam gerando insegurança, desistência de compras e baixa fidelização.  
+Acreditamos que o diferencial está em uma plataforma que valorize **diálogo, confiança e atendimento humanizado**.
+
+O LinkSales foi criado exatamente para suprir essa necessidade.
+
+---
+
+## ⚙️ Funcionalidades Principais
+- Cadastro de **clientes e comerciantes**  
+- Criação e visualização de **postagens de produtos**  
+- **Chat humanizado** direto com o comerciante  
+- **Feed dinâmico** com novas publicações  
+- Sistema de **carrinho** e **seguir comerciantes**  
+- Interface moderna, fluida e responsiva  
+
+---
+
+## 🧩 Tecnologias Utilizadas
 | Tecnologia | Descrição |
-|-------------|------------|
+|-----------|-----------|
 | **Node.js** | Back-end da aplicação |
-| **Express.js** | Framework para construção de rotas e APIs |
-| **MySQL** | Banco de dados NoSQL para armazenamento de informações |
-| **React Native** | Interface mobile multiplataforma |
-| **GitHub Actions** */* **Bugasura** | Integração contínua e testes automatizados |
+| **Express.js** | Rotas e API |
+| **MySQL** | Banco de dados relacional |
+| **React Native (Expo)** | Aplicativo mobile |
+| **GitHub Actions** / **Bugasura** | CI/CD e automação |
 
 ---
 
-### 📋 Requisitos Funcionais (RF)
+## 📋 Requisitos Funcionais (RF)
 | Código | Descrição | Prioridade |
-|--------|------------|-------------|
-| RF01 | O sistema deve permitir o cadastro de usuários (clientes e comerciantes). | Alta |
-| RF02 | O sistema deve permitir a criação de postagens com produtos. | Alta |
-| RF03 | O sistema deve permitir o acesso ao atendente de forma humanizada. | Alta |
-| RF04 | O sistema deve exibir um feed com publicações recentes. | Média |
-| RF05 | O sistema deve permitir salvar produtos no carrinho e seguir comerciantes. | Baixa |
+|--------|-----------|------------|
+| **RF01** | Permitir cadastro de usuários (clientes e comerciantes). | Alta |
+| **RF02** | Criar postagens de produtos. | Alta |
+| **RF03** | Disponibilizar atendimento humanizado no chat. | Alta |
+| **RF04** | Exibir feed com postagens recentes. | Média |
+| **RF05** | Salvar produtos no carrinho e seguir comerciantes. | Baixa |
 
 ---
 
-### 🔒 Requisitos Não Funcionais (RNF)
+## 🔒 Requisitos Não Funcionais (RNF)
 | Código | Descrição | Prioridade |
-|--------|------------|-------------|
-| RNF01 | O aplicativo deve ser responsivo para diferentes tamanhos de tela. | Alta |
-| RNF02 | As senhas devem ser armazenadas de forma criptografada. | Alta |
-| RNF03 | O tempo de resposta das requisições não deve ultrapassar 3 segundos. | Média |
-| RNF04 | O sistema deve enviar notificações de acesso ao e-mail do usuário. | Média |
-| RNF05 | A interface deve ser limpa e fluida, garantindo boa navegação. | Baixa |
+|--------|-----------|------------|
+| **RNF01** | Interface responsiva para diferentes telas. | Alta |
+| **RNF02** | Criptografia de senhas. | Alta |
+| **RNF03** | Respostas da API em até 3 segundos. | Média |
+| **RNF04** | Envio de notificações de acesso ao e-mail do usuário. | Média |
+| **RNF05** | Interface fluida, simples e intuitiva para navegação. | Baixa |
 
 ---
-### 🧪 Testes Automatizados
 
-O projeto utiliza GitHub Actions para integração contínua e testes automáticos em cada push ou pull request.
+## 🧪 Testes Automatizados
+O projeto utiliza **GitHub Actions** para:
 
-### 📞 Contato
+- Testes automáticos,  
+- Integração contínua,  
+- Validação do código a cada push ou PR.
 
-📧 Email: luishenriquesm415@gmail.com
-💻 GitHub: https://github.com/Noname-eng167/LinkSales-Ecoomerce
-
-*“Comunicação é o elo que transforma uma venda em confiança.”*
 ---
+
+## 📞 Contato
+📧 **luishenriquesm415@gmail.com**  
+💻 GitHub: **https://github.com/Noname-eng167/LinkSales-Ecoomerce**
+
+---
+
+### *“Comunicação é o elo que transforma uma venda em confiança.”*  
 **— Equipe LinkSales**
