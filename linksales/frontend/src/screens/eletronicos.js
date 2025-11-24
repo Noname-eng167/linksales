@@ -7,33 +7,32 @@ import {
   TouchableOpacity, 
   StyleSheet 
 } from 'react-native';
-
-// 1. CORREÇÃO: Importando SafeAreaView da biblioteca certa
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 
 const lojas = [
   {
     id: '1',
-    nome: 'Nordeste Modas',
-    endereco: 'Feira da sulanca - Setor Azul',
-    foto: 'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=400&q=80',
+    nome: 'NAGEM',
+    endereco: 'Shopping Recife - Piso L1',
+    // Como você vai adicionar as imagens depois, deixei placeholders ou links genéricos
+    foto: 'https://raichu-uploads.s3.amazonaws.com/logo_nagem-loja-virtual_GFaJZ0.png', 
   },
   {
     id: '2',
-    nome: 'Via Sonho',
-    endereco: 'Fábrica da moda Rua B',
-    foto: 'https://images.unsplash.com/photo-1520975918108-b5cc2c77f79d?auto=format&fit=crop&w=400&q=80',
+    nome: 'VIP Informática',
+    endereco: 'R. da Concórdia, 200 - Centro',
+    foto: 'https://1.bp.blogspot.com/-8IKwf1cuWX4/UadosRVK0tI/AAAAAAAAAbE/7bGCesn1l6Q/s1600/Logo+02.jpg', 
   },
   {
     id: '3',
-    nome: 'Renner',
-    endereco: 'Shopping Caruaru',
-    foto: 'https://amanha.com.br/images/p/14285/Fachada-de-uma-das-lojas-da-Renner.jpg',
+    nome: 'Kalunga',
+    endereco: 'Shopping RioMar',
+    foto: 'https://seeklogo.com/images/K/kalunga-logo-7BA64CC1EB-seeklogo.com.png',
   },
 ];
 
-export default function RoupasScreen({ navigation }) {
+export default function EletronicosScreen({ navigation }) {
   
   const irParaPerfilLoja = (loja) => {
     navigation.navigate('StoreProfile', { loja: loja });
@@ -48,13 +47,13 @@ export default function RoupasScreen({ navigation }) {
       <Image
         source={{ uri: item.foto }}
         style={styles.foto}
-        resizeMode="cover"
+        resizeMode="contain" // Mudei para contain para logos de eletrônicos ficarem melhores
       />
       <View style={styles.infoContainer}>
         <Text style={styles.nome}>{item.nome}</Text>
         <View style={styles.enderecoContainer}>
           <Ionicons name="location-outline" size={14} color="#666" style={{ marginRight: 4 }} />
-          <Text style={styles.endereco}>{item.endereco}</Text>
+          <Text style={styles.endereco} numberOfLines={1}>{item.endereco}</Text>
         </View>
       </View>
       <Ionicons name="chevron-forward" size={20} color="#ccc" />
@@ -69,7 +68,7 @@ export default function RoupasScreen({ navigation }) {
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
           <Ionicons name="arrow-back" size={24} color="#1B71BD" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Lojas de Roupas</Text>
+        <Text style={styles.headerTitle}>Lojas de Eletrônicos</Text>
         <View style={{ width: 24 }} /> 
       </View>
 
@@ -128,7 +127,9 @@ const styles = StyleSheet.create({
     width: 70,
     height: 70,
     borderRadius: 10,
-    backgroundColor: '#eee',
+    backgroundColor: '#fff', // Fundo branco para logos png transparentes
+    borderWidth: 1,
+    borderColor: '#eee',
   },
   infoContainer: {
     flex: 1,
@@ -147,8 +148,7 @@ const styles = StyleSheet.create({
   },
   endereco: {
     fontSize: 14,
-    flex: 1,
-    flexWrap: 'wrap',
     color: '#666',
+    flex: 1,
   },
 });

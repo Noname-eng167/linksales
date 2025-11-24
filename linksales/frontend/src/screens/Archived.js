@@ -11,7 +11,7 @@ export default function Archived() {
       ) : (
         <FlatList
           data={archivedImages}
-          keyExtractor={(item, index) => index.toString()}
+          keyExtractor={(__item, index) => index.toString()}
           numColumns={3}
           renderItem={({ item }) => (
             <Image source={{ uri: item.uri }} style={styles.image} />

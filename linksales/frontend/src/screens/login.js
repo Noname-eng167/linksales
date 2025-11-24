@@ -33,8 +33,8 @@ export default function Login({ navigation }) {
 
     try {
       const response = await API.post('/auth/login', { 
-        email,
-        password,
+        email: email.trim(),
+        password: password.trim(),
       });
 
       const { token, user } = response.data;

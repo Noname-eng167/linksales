@@ -1,12 +1,9 @@
 import UserModel from '../models/user.js';
-// 1. Importando a conexão para usar Transações
 import { sequelize } from '../database/connection.js'; 
-// 2. Importando os modelos de tabelas relacionadas
 import ComercianteModel from '../models/Comerciante.js';
 import ClienteModel from '../models/Cliente.js';
 import bcrypt from 'bcrypt';
 
-// Definição do erro 404 
 export class UserNotFoundError extends Error {
     constructor(message) {
         super(message);
@@ -15,38 +12,34 @@ export class UserNotFoundError extends Error {
     }
 }
 
+// 🟢 Função Auxiliar para converter Data (DD/MM/YYYY -> YYYY-MM-DD)
+function formataDataParaBanco(dataBR) {
+    if (!dataBR) return null;
+    // Se já tiver traço, assume que está certo
+    if (dataBR.includes('-')) return dataBR;
+    
+    // Quebra a string "23/10/1990" em partes
+    const partes = dataBR.split('/');
+    if (partes.length !== 3) return null;
+    
+    const [dia, mes, ano] = partes;
+    // Retorna "1990-10-23"
+    return `${ano}-${mes}-${dia}`;
+}
+
 class UserService {
     
     async login(email, password) {
-        // 1. Busca o usuário
         const user = await UserModel.findOne({ 
             where: { email },
-            // Garante que estamos trazendo a senha do banco
             attributes: ['id_usuario', 'email', 'senha', 'tipo_conta', 'id_comerciante', 'id_cliente']
         });
 
         if (!user) {
-            console.log("❌ Login falhou: Usuário não encontrado no banco.");
             throw new Error('Credenciais inválidas.');
         }
 
-        // 🔍 DEBUG: Vamos ver o que tem no banco e o que chegou
-        console.log("====================================");
-        console.log("🔍 DEBUG LOGIN:");
-        console.log("📧 Email:", email);
-        console.log("🔑 Senha Digitada:", password);
-        console.log("🔒 Senha no Banco (Hash):", user.senha);
-        
-        // Verifica se a senha no banco é um hash do bcrypt (começa com $2b$)
-        const isHash = user.senha && user.senha.startsWith('$2b$');
-        console.log("A senha do banco é um hash válido?", isHash ? "SIM" : "NÃO (Isso é um problema!)");
-
-        // 2. Verifica a senha
-        // Se a senha no banco NÃO for hash (for texto puro), o compare vai dar erro ou false
         const isPasswordValid = await user.checkPassword(password); 
-        
-        console.log("✅ Resultado da Comparação:", isPasswordValid);
-        console.log("====================================");
         
         if (!isPasswordValid) {
             throw new Error('Credenciais inválidas.');
@@ -57,23 +50,17 @@ class UserService {
 
     async createUser(userData) {
         const transaction = await sequelize.transaction();
+        
         try {
-            const { email, senha, tipo_conta, telefone, cpf, nome, nome_comerciante, nascimento } = userData;
-
-            // Validações básicas antes de tentar criar
-            if (!email || !senha || !cpf) {
-                throw new Error('Dados obrigatórios faltando (Email, Senha ou CPF).');
-            }
+            const { email, senha, tipo_conta, telefone, cpf, nome, nome_comerciante, nascimento, ...rest } = userData;
 
             let id_comerciante = null;
             let id_cliente = null;
 
             if (tipo_conta === 'comerciante') {
-                // Verifica Duplicidade
-                const existingComerciante = await ComercianteModel.findOne({ where: { cpnj: cpf }, transaction });
+                const existingComerciante = await ComercianteModel.findOne({ where: { cpnj: cpf } });
                 if (existingComerciante) throw new Error('CNPJ já cadastrado.');
 
-                // Cria Comerciante
                 const novoComerciante = await ComercianteModel.create({
                     nome_loja: nome_comerciante || nome, 
                     cpnj: cpf, 
@@ -83,33 +70,31 @@ class UserService {
                 id_comerciante = novoComerciante.id_comerciante;
 
             } else {
-                // Verifica Duplicidade
-                const existingCliente = await ClienteModel.findOne({ where: { cpf: cpf }, transaction });
+                const existingCliente = await ClienteModel.findOne({ where: { cpf: cpf } });
                 if (existingCliente) throw new Error('CPF já cadastrado.');
 
-                // Cria Cliente
+                // 🟢 APLICAÇÃO DA CORREÇÃO DE DATA AQUI
+                const dataNascimentoFormatada = formataDataParaBanco(nascimento);
+
                 const novoCliente = await ClienteModel.create({
                     nome: nome,
                     cpf: cpf, 
-                    nascimento: nascimento, 
-                    telefone: telefone // Adicionando telefone ao cliente também
+                    nascimento: dataNascimentoFormatada, // Usa a data convertida
+                    telefone: telefone 
                 }, { transaction });
                 
                 id_cliente = novoCliente.id_cliente;
             }
 
-            // Verifica Duplicidade de Email
-            const existingUser = await UserModel.findOne({ where: { email }, transaction });
+            const existingUser = await UserModel.findOne({ where: { email } });
             if (existingUser) throw new Error('Email já cadastrado.');
 
-            // Cria Usuário
-            // IMPORTANTE: Passamos explicitamente null se o ID não existir
             const novoUsuario = await UserModel.create({
-                email: email,
-                senha: senha, 
-                tipo_conta: tipo_conta,
-                id_comerciante: id_comerciante, 
-                id_cliente: id_cliente
+                email,
+                senha, 
+                tipo_conta,
+                id_comerciante, 
+                id_cliente
             }, { transaction });
 
             await transaction.commit();
@@ -121,18 +106,15 @@ class UserService {
 
         } catch (error) {
             await transaction.rollback();
-            console.error('Falha detalhada na criação:', error);
+            console.error('Falha na transação de cadastro:', error);
             throw error;
         }
     }
 
-    // Buscar todos os usuários
     async getAllUsers() {
-        // Excluir a senha das consultas de listagem por segurança
         return await UserModel.findAll({ attributes: { exclude: ['senha'] } });
     }
 
-    // Buscar usuário por ID
     async getUserById(id) {
         const user = await UserModel.findByPk(id, { 
             attributes: { exclude: ['senha'] },
@@ -146,7 +128,6 @@ class UserService {
             throw new UserNotFoundError('Usuário não encontrado.');
         }
 
-        // Achata o objeto para facilitar pro frontend
         const userJson = user.toJSON();
         let responseData = { ...userJson };
         
@@ -162,7 +143,6 @@ class UserService {
         return responseData;
     }
 
-    // Atualizar usuário 
     async updateUser(id, data) {
         const transaction = await sequelize.transaction();
         try {
@@ -200,6 +180,11 @@ class UserService {
                 const clienteData = {};
                 if (profileData.nome) clienteData.nome = profileData.nome;
                 if (profileData.cpf) clienteData.cpf = profileData.cpf;
+                
+                // 🟢 Corrige a data no update também
+                if (profileData.nascimento) {
+                    clienteData.nascimento = formataDataParaBanco(profileData.nascimento);
+                }
 
                 await ClienteModel.update(clienteData, {
                     where: { id_cliente: user.id_cliente },
@@ -208,8 +193,6 @@ class UserService {
             }
 
             await transaction.commit();
-
-            // Retorna o usuário atualizado
             return await this.getUserById(id);
 
         } catch (error) {
@@ -219,7 +202,6 @@ class UserService {
         }
     }
 
-    // Deletar usuário
     async deleteUser(id) {
         const rowsDeleted = await UserModel.destroy({
             where: { id_usuario: id }
@@ -232,7 +214,6 @@ class UserService {
     }
 }
 
-// Configuração Rápida de Associações (Se não estiverem nos arquivos de modelo)
 UserModel.belongsTo(ComercianteModel, { foreignKey: 'id_comerciante', as: 'comerciante' });
 UserModel.belongsTo(ClienteModel, { foreignKey: 'id_cliente', as: 'cliente' });
 
