@@ -61,13 +61,6 @@ export default function SettingsScreen({ navigation }) {
       <Text style={styles.headerTitle}>Configurações</Text>
 
       <View style={styles.menuWrapper}>
-        {/* Opção: Editar Perfil */}
-        <OptionItem 
-          title="Editar Nome do Perfil" 
-          iconName="person-outline"
-          onPress={() => navigation.navigate('EditProfileName')} 
-        />
-
         {/* Opção: Arquivados */}
         <OptionItem 
           title="Arquivados" 
