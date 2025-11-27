@@ -16,7 +16,7 @@
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/adaptive-icon.png"
       },
-      "package": "com.seuusuario.linksales", 
+      "package": "com.seuusuario.linksales",
       "edgeToEdgeEnabled": false,
       "predictiveBackGestureEnabled": false
     },
@@ -36,7 +36,8 @@
             "backgroundColor": "#000000"
           }
         }
-      ]
+      ],
+      "expo-secure-store"
     ],
     "experiments": {
       "reactCompiler": true

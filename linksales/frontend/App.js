@@ -10,7 +10,7 @@ import Register from './src/screens/register';
 import ForgotPassword from './src/screens/ForgotPassword';
 import MainTabs from './src/screens/MainTabs'; 
 import StoreProfileScreen from './src/screens/StoreProfileScreen';
-import UserTypeScreen from './src/screens/UserTypeScreen'; // 🟢 ADICIONADO
+import UserTypeScreen from './src/screens/UserTypeScreen'; 
 
 const RootStack = createNativeStackNavigator();
 
